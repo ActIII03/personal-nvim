@@ -37,7 +37,7 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader>tu",
-				"<Cmd>ToggleTerm direction=horizontal size=15<CR>",
+				"<Cmd>ToggleTerm direction=horizontal size=16<CR>",
 				{ desc = "toggle  horizontal terminal" }
 			)
 		end,

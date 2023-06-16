@@ -43,6 +43,7 @@ return {
 			ensure_installed = {
 				"bash",
 				"c",
+				"dockerfile",
 				"html",
 				"javascript",
 				"json",
@@ -54,6 +55,7 @@ return {
 				"python",
 				"query",
 				"regex",
+				"terraform",
 				"tsx",
 				"typescript",
 				"vim",
