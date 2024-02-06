@@ -2,12 +2,6 @@
 -- Import required modules
 local dap = require("dap")
 
-local function modify_sys_path()
-	local cwd = vim.fn.getcwd()
-	-- Append the '/tests' directory to sys.path for the current session
-	vim.fn.system("python -c \"import sys; sys.path.append('" .. cwd .. "/tests')\"")
-end
-
 local function activate_virtualenv()
 	local cwd = vim.fn.getcwd()
 	local activate_script = cwd
@@ -32,7 +26,6 @@ dap.adapters.python = {
 	type = "executable",
 	command = "python", -- Consider dynamically determining this path based on the active virtualenv
 	args = { "-m", "debugpy.adapter" },
-	stopOnEntry = true,
 }
 
 -- Configuration for Python debugging
@@ -42,6 +35,8 @@ dap.configurations.python = {
 		type = "python",
 		request = "launch",
 		name = "Python: Unittest Discovery",
+		id = "1",
+		description = "unittest",
 		module = "unittest", -- Specify the module to run
 		args = { "discover", "-s", "${workspaceFolder}/tests", "-p", "test_*.py" },
 		-- Use pythonPath to dynamically set the Python interpreter if needed
@@ -53,7 +48,24 @@ dap.configurations.python = {
 		stopOnEntry = false,
 		console = "integratedTerminal",
 	},
-	-- Additional configurations for different scenarios can be added here
+	{
+		-- This configuration is for debugging
+		type = "python",
+		request = "launch",
+		name = "RunnerEnvironment",
+		id = "2",
+		description = "runner",
+		program = "/tmp/run_runner.py",
+		args = {},
+		-- Use pythonPath to dynamically set the Python interpreter if needed
+		pythonPath = function()
+			-- Assumes activate_virtualenv returns the path to the Python executable in the virtual environment
+			return activate_virtualenv()
+		end,
+		cwd = "${workspaceFolder}", -- Ensure the working directory is set to your project root
+		stopOnEntry = false,
+		console = "integratedTerminal",
+	},
 }
 
 -- DAP key mappings
