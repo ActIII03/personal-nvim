@@ -35,24 +35,82 @@ lsp_zero.on_attach(function(client, bufnr)
 	end, opts)
 end)
 
--- to learn how to use mason.nvim with lsp-zero
--- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
-require("mason").setup({})
-require("mason-lspconfig").setup({
-	ensure_installed = { "tsserver", "rust_analyzer", "pyright" },
-	handlers = {
-		lsp_zero.default_setup,
-		lua_ls = function()
-			local lua_opts = lsp_zero.nvim_lua_ls()
-			require("lspconfig").lua_ls.setup(lua_opts)
-		end,
-	},
+lsp_zero.preset()
+
+-- Mason via lspconfig
+local function on_attach(client, bufnr)
+	print("LSP attached")
+end
+
+local lspconfig = require("lspconfig")
+local function setup_servers()
+	require("mason").setup()
+	require("mason-lspconfig").setup({
+		automatic_setup = true,
+		-- ensure_installed and other configuration options
+	})
+
+	local servers = require("mason-lspconfig").get_installed_servers()
+	for _, server in pairs(servers) do
+		lspconfig[server].setup({
+			on_attach = on_attach,
+			-- other common configurations
+		})
+	end
+end
+
+setup_servers()
+
+-- Set indentation for Terraform files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "terraform",
+	callback = function()
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.tabstop = 2
+		vim.opt_local.expandtab = true
+	end,
 })
 
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
+-- luasnip setup
+local luasnip = require("luasnip")
+
 cmp.setup({
+	snippet = {
+		expand = function(args)
+			luasnip.lsp_expand(args.body)
+		end,
+	},
+	mapping = cmp.mapping.preset.insert({
+		["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
+		["<C-d>"] = cmp.mapping.scroll_docs(4), -- Down
+		-- C-b (back) C-f (forward) for snippet placeholder navigation.
+		["<C-Space>"] = cmp.mapping.complete(),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		}),
+		["<Tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+		["<S-Tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+	}),
 	sources = {
 		{ name = "path" },
 		{ name = "nvim_lsp" },
@@ -60,11 +118,4 @@ cmp.setup({
 		{ name = "luasnip", keyword_length = 2 },
 		{ name = "buffer", keyword_length = 3 },
 	},
-	formatting = lsp_zero.cmp_format(),
-	mapping = cmp.mapping.preset.insert({
-		["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-		["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-		["<C-y>"] = cmp.mapping.confirm({ select = true }),
-		["<C-Space>"] = cmp.mapping.complete(),
-	}),
 })

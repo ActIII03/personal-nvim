@@ -29,6 +29,7 @@ dap.adapters.python = {
 }
 
 -- Configuration for Python debugging
+-- doc -> :h dap-launch-json
 dap.configurations.python = {
 	{
 		-- This configuration is for debugging Python unittests
