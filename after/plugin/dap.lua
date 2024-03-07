@@ -56,7 +56,7 @@ dap.configurations.python = {
 		name = "RunnerEnvironment",
 		id = "2",
 		description = "runner",
-		program = "/tmp/run_runner.py",
+		program = "/home/atouche/scripts/run_runner.py",
 		args = {},
 		-- Use pythonPath to dynamically set the Python interpreter if needed
 		pythonPath = function()
