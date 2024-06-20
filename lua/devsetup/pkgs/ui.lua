@@ -39,6 +39,8 @@ return function(use)
 		},
 	})
 
+	use({ "nvim-neotest/nvim-nio" })
+
 	-- pin buffer
 	use({ "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" })
 end

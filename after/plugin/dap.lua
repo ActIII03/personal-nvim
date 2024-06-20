@@ -57,6 +57,7 @@ dap.configurations.python = {
 		id = "2",
 		description = "runner",
 		program = "/home/atouche/scripts/run_runner.py",
+		-- args = { "--email-override=atouche@pdx.edu", "-t", "-d", "--bundle-size", "10" },
 		args = {},
 		-- Use pythonPath to dynamically set the Python interpreter if needed
 		pythonPath = function()
