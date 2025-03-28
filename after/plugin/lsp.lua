@@ -18,10 +18,7 @@ lsp_zero.on_attach(function(client, bufnr)
 	vim.keymap.set("n", "[d", function()
 		vim.diagnostic.goto_next()
 	end, opts)
-	vim.keymap.set("n", "]d", function()
-		vim.diagnostic.goto_prev()
-	end, opts)
-	vim.keymap.set("n", "<leader>vca", function()
+	vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts) vim.keymap.set("n", "<leader>vca", function()
 		vim.lsp.buf.code_action()
 	end, opts)
 	vim.keymap.set("n", "<leader>vrr", function()
@@ -37,11 +34,6 @@ end)
 
 lsp_zero.preset()
 
--- Mason via lspconfig
-local function on_attach(client, bufnr)
-	print("LSP attached")
-end
-
 local lspconfig = require("lspconfig")
 local function setup_servers()
 	require("mason").setup()
@@ -50,13 +42,33 @@ local function setup_servers()
 		-- ensure_installed and other configuration options
 	})
 
-	local servers = require("mason-lspconfig").get_installed_servers()
-	for _, server in pairs(servers) do
-		lspconfig[server].setup({
-			on_attach = on_attach,
-			-- other common configurations
-		})
-	end
+  local servers = require("mason-lspconfig").get_installed_servers()
+    for _, server in pairs(servers) do
+        if server == "tsserver" then
+            lspconfig.tsserver.setup({
+                on_attach = function(client, bufnr)
+                    -- Disable tsserver formatting if using another formatter like eslint
+                    client.server_capabilities.document_formatting = false
+                    on_attach(client, bufnr)
+                end,
+                root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
+            })
+        elseif server == "eslint" then
+            lspconfig.eslint.setup({
+                on_attach = on_attach,
+                root_dir = lspconfig.util.root_pattern(".eslintrc.js", ".eslintrc.json", ".git"),
+            })
+        elseif server == "tailwindcss" then
+            lspconfig.tailwindcss.setup({
+                on_attach = on_attach,
+            })
+        else
+            lspconfig[server].setup({
+                on_attach = on_attach,
+                -- other common configurations
+            })
+        end
+    end
 end
 
 setup_servers()
