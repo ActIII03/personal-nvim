@@ -39,14 +39,14 @@ M.setup = function(opts)
 	lspconfig.pyright.setup({
 		on_attach = opts.on_attach,
 		capabilities = opts.capabilities,
-		root_dir = util.root_pattern(".venv", "venv", "pyproject.toml"),
+		root_dir = util.root_pattern(".venv", "venv", "pyproject.toml", "ruff.toml"),
 		on_init = function(client)
 			client.config.settings.python.pythonPath = py_path
 		end,
 		settings = {
 			python = {
 				exclude = { ".venv" },
-				venvPath = "./venv",
+				venvPath = {"./venv", "./finti3/.venv"},
 				venv = ".venv",
 			},
 		},

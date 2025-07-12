@@ -1,3 +1,6 @@
+-- File: ~/.config/nvim/lua/devsetup/pkgs/linters-formatters.lua
+-- This file should ONLY contain nvim-lint and conform.nvim setup.
+
 return function(use)
 	use({
 		"mfussenegger/nvim-lint",
@@ -41,20 +44,22 @@ return function(use)
 			local conform = require("conform")
 
 			conform.setup({
+				stop_after_first = true,
+
 				formatters_by_ft = {
 					lua = { "stylua" },
 					python = { "black" },
-					svelte = { { "prettierd", "prettier" } },
-					javascript = { { "prettierd", "prettier" } },
-					typescript = { { "prettierd", "prettier" } },
-					javascriptreact = { { "prettierd", "prettier" } },
-					typescriptreact = { { "prettierd", "prettier" } },
-					json = { { "prettierd", "prettier" } },
-					graphql = { { "prettierd", "prettier" } },
+					svelte = { "prettierd", "prettier" },
+					javascript = { "prettierd", "prettier" },
+					typescript = { "prettierd", "prettier" },
+					javascriptreact = { "prettierd", "prettier" },
+					typescriptreact = { "prettierd", "prettier" },
+					json = { "prettierd", "prettier" },
+					graphql = { "prettierd", "prettier" },
 					java = { "google-java-format" },
 					kotlin = { "ktlint" },
 					ruby = { "standardrb" },
-					markdown = { { "prettierd", "prettier" } },
+					markdown = { "prettierd", "prettier" },
 					erb = { "htmlbeautifier" },
 					html = { "htmlbeautifier" },
 					bash = { "beautysh" },
@@ -62,8 +67,8 @@ return function(use)
 					rust = { "rustfmt" },
 					yaml = { "yamlfix" },
 					toml = { "taplo" },
-					css = { { "prettierd", "prettier" } },
-					scss = { { "prettierd", "prettier" } },
+					css = { "prettierd", "prettier" },
+					scss = { "prettierd", "prettier" },
 				},
 			})
 
