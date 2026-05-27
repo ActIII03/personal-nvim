@@ -11,6 +11,7 @@ return function(use)
 	-- Treesitter for better syntax highlighting
 	use({
 		"nvim-treesitter/nvim-treesitter",
+		branch = "master", -- Forces the stable legacy version
 		run = ":TSUpdate",
 	})
 
