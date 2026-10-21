@@ -1,5 +1,5 @@
-return function(use)
-	-- Themes
-	use("morhetz/gruvbox")
-	use("yashguptaz/calvera-dark.nvim")
-end
+return {
+    -- Themes
+    "morhetz/gruvbox",
+    "yashguptaz/calvera-dark.nvim",
+}

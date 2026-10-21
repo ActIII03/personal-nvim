@@ -1,3 +1,3 @@
 require("devsetup.remap")
-require("devsetup.packer")
+require("devsetup.lazy")
 require("devsetup.set")
