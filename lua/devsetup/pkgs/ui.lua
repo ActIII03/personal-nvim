@@ -1,46 +1,41 @@
-return function(use)
+return {
 	-- UI Enhancements
-	use("nvim-tree/nvim-web-devicons") -- File icons
-	use("echasnovski/mini.base16") -- Theme support for nvim-tree and status line
+	"nvim-tree/nvim-web-devicons", -- File icons
+	"echasnovski/mini.base16", -- Theme support for status line and trees
 
 	-- Startup menu
-	use({
+	{
 		"startup-nvim/startup.nvim",
-		requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 		config = function()
 			require("startup").setup()
 		end,
-	})
-	-- Statusbar
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "nvim-tree/nvim-web-devicons", opt = true },
-	})
+	},
 
-	use({
+	-- Statusbar
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+
+	{
 		"utilyre/barbecue.nvim",
-		tag = "*",
-		requires = {
+		version = "*",
+		dependencies = {
 			"SmiteshP/nvim-navic",
-			"nvim-tree/nvim-web-devicons", -- optional dependency
+			"nvim-tree/nvim-web-devicons",
 		},
-		after = "nvim-web-devicons", -- keep this if you're using NvChad
 		config = function()
 			require("barbecue").setup()
 		end,
-	})
+	},
 
-	use({
-		"nvim-tree/nvim-tree.lua",
-		requires = {
-			"nvim-tree/nvim-web-devicons", -- optional
-			"antosha417/nvim-lsp-file-operations",
-			"echasnovski/mini.base16",
-		},
-	})
+	{ "nvim-neotest/nvim-nio" },
 
-	use({ "nvim-neotest/nvim-nio" })
-
-	-- pin buffer
-	use({ "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" })
-end
+	-- Pin buffer
+	{
+		"akinsho/bufferline.nvim",
+		version = "*",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+}

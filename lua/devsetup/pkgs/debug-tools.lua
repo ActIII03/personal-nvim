@@ -1,14 +1,15 @@
-return function(use)
-	-- Debugging
-	use({
-		"mfussenegger/nvim-dap",
-		requires = {
-			"rcarriga/nvim-dap-ui", -- A UI for nvim-dap
-		},
-	})
+return {
+    -- Debugging
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            "rcarriga/nvim-dap-ui", -- A UI for nvim-dap
+            "nvim-neotest/nvim-nio", -- Required dependency for newer versions of dap-ui
+        },
+    },
 
-	use({
-		"theHamsta/nvim-dap-virtual-text",
-		requires = { "mfussenegger/nvim-dap" },
-	})
-end
+    {
+        "theHamsta/nvim-dap-virtual-text",
+        dependencies = { "mfussenegger/nvim-dap" },
+    },
+}
