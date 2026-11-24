@@ -10,7 +10,6 @@ return {
     -- Treesitter for better syntax highlighting
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "master", -- Forces the stable legacy version
         build = ":TSUpdate",
     },
 
